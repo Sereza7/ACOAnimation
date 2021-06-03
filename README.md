@@ -11,3 +11,9 @@ https://youtu.be/FgbOtWgEnJE
 
 Old version of the animation:
 https://youtu.be/fCJVfSehcpE
+
+
+
+Presentation slides:
+
+https://docs.google.com/presentation/d/1V1FmoMcheOH6OL9ascsREVAVck8XcPkgGyRMHbNSeQM/edit?usp=sharing

@@ -1,7 +1,5 @@
 # ACOAnimation
- AVis course spring 2021 at Keio University.
-
-Most of the code in the notebook is still quite messy, I'll take a look at it and make a new notebook with at least an okay organisation (maybe more commentaries...).
+ AVis course spring 2021 at Keio University, Lucas Charpentier.
 
 https://youtu.be/4P6rDiFF1V0
 
@@ -17,3 +15,5 @@ https://youtu.be/fCJVfSehcpE
 Presentation slides:
 
 https://docs.google.com/presentation/d/1V1FmoMcheOH6OL9ascsREVAVck8XcPkgGyRMHbNSeQM/edit?usp=sharing
+
+Read the notebook "Animation.ipynb" for more information.

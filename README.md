@@ -33,11 +33,16 @@ The distance between two points in this build is a bit special, if you want to t
 
 Unity v. 2020.3.1f1
 
+The web build is... working? Really unstable, might be down at any point in the future: https://sereza7.github.io/ACOAnimation/ 
+
+Video demonstration of the latest version of the project: https://youtu.be/OKg2MPJ-gUQ
+
 06/09/21: New application with parameters & all
 
 ___________________________________________
-Design of physically grounded
-communication system course spring 2021 at Keio University, Lucas Charpentier.
+Design of physically grounded communication system course spring 2021 at Keio University, Lucas Charpentier.
+
+I started this project in this course, and decided to expand upon it later on. Under there you can find miscellaneous documentation and information about early stages of this project.
 
 ## Mid-term report:
 https://youtu.be/4P6rDiFF1V0

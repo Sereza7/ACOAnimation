@@ -125,7 +125,7 @@ public class PheromoneGrid : MonoBehaviour
 	
 	}
         
-	internal List<Vector3> neighborList(Vector2Int start,Boolean printResult=true) { 
+	internal List<Vector3> neighborList(Vector2Int start,Boolean printResult=false) { 
 		List<Vector3> r = new List<Vector3>();
         foreach ( Vector2Int delta in this.grids.Keys){
 			int x = start.x + delta.x;

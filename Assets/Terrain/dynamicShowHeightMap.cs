@@ -44,7 +44,7 @@ public class dynamicShowHeightMap : MonoBehaviour
 		{
 			min = 1;
 			max = 0;
-			Debug.Log("Generation of the terrain step "+iter.ToString());
+			//Debug.Log("Generation of the terrain step "+iter.ToString());
 			float[,] nvalues = new float[values.GetLength(0) * 2 - 1, values.GetLength(1) * 2 - 1];
 			for (int i = 0; i < values.GetLength(0) - 1; i++)
 			{

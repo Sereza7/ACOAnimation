@@ -18,7 +18,9 @@ public class AntSupervisorDynamic : MonoBehaviour
 	void Start()
 	{
 		antList = new AntControllerDynamic[antAmount];
-		for (int i = 0; i < antList.GetLength(0); i++)
+		antList[0] = antPrefab.GetComponent<AntControllerDynamic>();
+		antList[0].tickSpeed = tickSpeed;
+		for (int i = 1; i < antList.GetLength(0); i++)
 		{
 			GameObject ant = Instantiate(antPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 			antList[i] = ant.GetComponent<AntControllerDynamic>();
@@ -37,7 +39,7 @@ public class AntSupervisorDynamic : MonoBehaviour
 			{
 				ant.updatePosition(currentTick);
 			}
-			Debug.Log(currentTick);
+			//Debug.Log(currentTick);
 			currentTick++;
 		}
 	}

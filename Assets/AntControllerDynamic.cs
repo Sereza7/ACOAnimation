@@ -157,7 +157,7 @@ public class AntControllerDynamic : MonoBehaviour
 	internal float distance(Vector3 spotA, Vector3 spotB)
 	{
 		if (spotA.z == spotB.z) {
-			print("samePoint");
+			//print("samePoint");
 			return 0.1f;
 		} else if (Math.Abs(spotA.x - spotB.x) <= 1 && Math.Abs(spotA.y - spotB.y) <= 1) {
 			return (float)Math.Pow(spotA[2] * 100 - spotB[2] * 100,2) + 0.1f;

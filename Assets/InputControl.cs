@@ -3,6 +3,7 @@
 public class InputControl : MonoBehaviour
 {
 	public GameObject cameraOrbit;
+	public GameObject parameterMenu;
 
 	public float rotateSpeed = 8f;
 
@@ -26,5 +27,19 @@ public class InputControl : MonoBehaviour
 			cameraOrbit.transform.localScale = cameraOrbit.transform.localScale * (1f - scrollFactor);
 		}
 
+		float horizontalMovement = Input.GetAxis("Horizontal");
+		if (horizontalMovement != 0)
+		{
+			cameraOrbit.transform.localPosition += -cameraOrbit.transform.forward * horizontalMovement;
+		}
+		float verticalMovement = Input.GetAxis("Vertical");
+		if (verticalMovement != 0)
+		{
+			cameraOrbit.transform.localPosition += cameraOrbit.transform.right * verticalMovement;
+		}
+		if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
+		{
+			parameterMenu.SetActive(!parameterMenu.activeSelf);
+		}
 	}
 }

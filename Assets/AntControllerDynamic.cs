@@ -7,8 +7,13 @@ using Random = UnityEngine.Random;
 
 public class AntControllerDynamic : MonoBehaviour
 {
-	private static readonly float GAMMA = 0.01f;
-	private static readonly float Q = 1;
+	//Parameters (see the ParameterManager  for more info and further ideas)
+	static internal float GAMMA = 0.01f;
+	static internal float Q = 1;
+
+	static internal Color antColor;
+	static internal bool antColorVariation = true;
+	static internal float antSize = 1.5f;
 
 	private List<Vector2> path;
 	public GameObject context;
@@ -27,42 +32,57 @@ public class AntControllerDynamic : MonoBehaviour
 
 	private Boolean isSearching;
 
-	internal void SetTickSpeed(float tickSpeed)
-	{
-		this.tickSpeed = tickSpeed;
-	}
+
 
 	private Vector3 coords;
 	private float costPath;
-	private float tickSpeed;
+	internal float tickSpeed;
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		this.path = new List<Vector2>();
 		this.isSearching = true;
-		this.target = context.GetComponent<placeContext>().foodPos;
-		this.source = context.GetComponent<placeContext>().spawnPos;
+		this.target = new Vector2Int(0, 0);
+		try { this.target = context.GetComponent<placeContext>().foodPos; }
+		catch { this.target = context.GetComponent<dynamicPlaceContext>().foodPos; }
+		this.source = new Vector2Int(0, 0);
+		try { this.source = context.GetComponent<placeContext>().spawnPos; }
+		catch { this.source = context.GetComponent<dynamicPlaceContext>().spawnPos; }
+
 		this.path.Add(source);
-		this.heightMap = terrain.GetComponent<showHeightMap>().heightMap;
+		this.heightMap = new float[1, 1];
+		try { this.heightMap = terrain.GetComponent<showHeightMap>().heightMap; }
+		catch { this.heightMap = terrain.GetComponent<dynamicShowHeightMap>().heightMap; }
 		this.newPosition = Vector3.zero;
-		this.oldPosition = Vector3.zero;
+		this.oldPosition = Vector3.one;
 		this.coords = new Vector3(this.source.x, this.source.y, this.heightMap[this.source.x, this.source.y]);
 		this.pheromones = terrain.GetComponent<PheromoneGrid>();
-		Debug.Log("Ant initialized"+source.x.ToString()+"#"+source.y.ToString());
+
+		
+		if (antColorVariation)
+		{
+			float colorDispersion = 0.5f;
+			Color.RGBToHSV(antColor, out float H, out float S, out float V);
+			Color customColor = Color.HSVToRGB(H, 
+				Math.Min(Math.Abs(S + Random.Range(-colorDispersion, colorDispersion)), 1),
+				Math.Min(Math.Abs(V + Random.Range(-colorDispersion, colorDispersion)), 1));
+			this.transform.Find("Model").GetComponent<MeshRenderer>().material.color = customColor;
+		}
+		else { this.transform.Find("Model").GetComponent<MeshRenderer>().material.color = antColor; }
+
+		this.transform.localScale *= antSize;
+
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		this.transform.position = Vector3.Lerp(this.oldPosition, this.newPosition, Math.Min((Time.time - this.lastTickTime)/this.tickSpeed, 1f));
-		if (this.newForward == Vector3.zero && Time.time > 5f)
+		
+		if (this.transform.forward != this.newForward)
 		{
-			this.gameObject.SetActive(false);
-		}
-		else if (this.transform.forward != this.newForward)
-		{
-			this.transform.forward = Vector3.Lerp(this.oldForward, this.newForward, Math.Min((Time.time - this.lastTickTime) / this.tickSpeed * 5, 1f));
+			this.transform.forward = Vector3.Lerp(this.oldForward, this.newForward, Math.Min(5*(Time.time - this.lastTickTime) / this.tickSpeed, 1f));
 		}
 	}
 	internal void updatePosition(int simulationTick)
@@ -96,7 +116,7 @@ public class AntControllerDynamic : MonoBehaviour
 		this.coords = newCoords;
 		this.lastTickTime = Time.time;
 		this.oldPosition = this.transform.position;
-		this.newPosition = new Vector3(newCoords.y, 0.015f + 33 * this.heightMap[(int)(newCoords.x), (int)(newCoords.y)], newCoords.x);
+		this.newPosition = new Vector3(newCoords.y, 0.015f + (int)terrain.GetComponent<Terrain>().terrainData.size.y * this.heightMap[(int)(newCoords.x), (int)(newCoords.y)], newCoords.x);
 		this.oldForward = this.transform.forward;
 		this.newForward = this.newPosition - this.oldPosition;
 		if (this.newForward == Vector3.zero)
@@ -196,7 +216,7 @@ public class AntControllerDynamic : MonoBehaviour
 
 			this.path.Add(terrainNextStep);
 		}
-		Debug.Log("Chose next step."+nextStep.x.ToString()+"#"+nextStep.y.ToString());
+		//Debug.Log("Chose next step."+nextStep.x.ToString()+"#"+nextStep.y.ToString());
 		return terrainNextStep;
 	}
 }

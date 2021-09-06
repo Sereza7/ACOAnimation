@@ -17,7 +17,7 @@ public class showHeightMap : MonoBehaviour
 		
 		string[] splitFileData = fileData.Split('\n');
 		float[,] heightMap = new float[splitFileData.GetLength(0)-1,splitFileData.GetLength(0)-1];
-		float min=1;
+		float min = 1;
 		float max = 0;
 		for (int i = 0; i<splitFileData.GetLength(0)-1; i++)
 		{

@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class PheromoneGrid : MonoBehaviour
 {
-	protected static float LOSS = 0.001f;
+	static internal float LOSS = 0.001f;
+	static internal bool initPheromones = true;
 	// Start is called before the first frame update
 	internal int size;
 	private float[,] N;
@@ -22,6 +23,7 @@ public class PheromoneGrid : MonoBehaviour
 	private Vector2 foodPos;
 
 	private Dictionary<Vector2Int, float[,]> grids;
+	
 
 	internal void addPheromone(Vector2Int start, Vector2Int end, float value)
 	{
@@ -50,8 +52,11 @@ public class PheromoneGrid : MonoBehaviour
 	}
 		void Start()
     {
-		this.foodPos = this.context.GetComponent<placeContext>().foodPos;
-		int gridSize = 33;
+		this.foodPos = new Vector2(0, 0);
+		try { this.foodPos = this.context.GetComponent<placeContext>().foodPos; }
+		catch { this.foodPos = this.context.GetComponent<dynamicPlaceContext>().foodPos; }
+
+		int gridSize = (int)(GetComponent<Terrain>().terrainData.size.y);
 		this.size = gridSize;
 		this.N = new float[gridSize, gridSize];
 		this.NE= new float[gridSize, gridSize];
@@ -80,18 +85,22 @@ public class PheromoneGrid : MonoBehaviour
 		this.grids.Add(new Vector2Int(0, 1), this.E);
 		this.grids.Add(new Vector2Int(0, -1), this.W);
 		
-        for (int y=0; y < gridSize; y++)
+		if (initPheromones)
 		{
-			for (int x = (int)foodPos.x + 1; x < gridSize; x++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x - 1, y), 2 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
-			for (int x = 0; x<(int)foodPos.x; x++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x + 1, y), 20 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
-				
-		}
-		for (int x = 0; x < gridSize; x++)
-		{
-			for (int y = (int)foodPos.y + 1; y < gridSize; y++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x, y-1), 2 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
-			for (int y = 0; y < (int)foodPos.y; y++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x, y+1), 20 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
+			for (int y = 0; y < gridSize; y++)
+			{
+				for (int x = (int)foodPos.x + 1; x < gridSize; x++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x - 1, y), 2 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
+				for (int x = 0; x < (int)foodPos.x; x++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x + 1, y), 20 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
 
+			}
+			for (int x = 0; x < gridSize; x++)
+			{
+				for (int y = (int)foodPos.y + 1; y < gridSize; y++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x, y - 1), 2 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
+				for (int y = 0; y < (int)foodPos.y; y++) { this.addPheromone(new Vector2Int(x, y), new Vector2Int(x, y + 1), 20 / (Math.Abs(x - foodPos.x) + Math.Abs(y - foodPos.y))); }
+
+			}
 		}
+        
 }
 
 
@@ -109,7 +118,7 @@ public class PheromoneGrid : MonoBehaviour
 			{
 				for (int y = 0; y < this.size; y++)
 				{
-					grid[x, y] = grid[x, y] * (1 - PheromoneGrid.LOSS);
+					grid[x, y] = grid[x, y] * (1 - LOSS);
 				}
 			}
 		}

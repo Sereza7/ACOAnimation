@@ -20,11 +20,14 @@ public class placeContext : MonoBehaviour
 			(int)Double.Parse(spawnPosS[1].Replace("e", "E"), System.Globalization.NumberStyles.Float));
 		this.foodPos = new Vector2Int((int)Double.Parse(foodPosS[0].Replace("e", "E"), System.Globalization.NumberStyles.Float),
 			(int)Double.Parse(foodPosS[1].Replace("e", "E"), System.Globalization.NumberStyles.Float));
-		float[,] heightMap = terrain.GetComponent<showHeightMap>().heightMap;
+		float[,] heightMap = new float[1, 1];
+		try { heightMap = terrain.GetComponent<showHeightMap>().heightMap; }
+		catch { heightMap = terrain.GetComponent<dynamicShowHeightMap>().heightMap; }
+			
 		//Debug.Log(heightMap);
 
-		this.transform.Find("antNest").localPosition = new Vector3(spawnPos.y, 33 * heightMap[(int)(spawnPos.x), (int)(spawnPos.y)], spawnPos.x);
-		this.transform.Find("apple").localPosition = new Vector3(foodPos.y, 33 * heightMap[(int)(foodPos.x), (int)(foodPos.y)], foodPos.x);
+		this.transform.Find("antNest").localPosition = new Vector3(spawnPos.y, (int)terrain.GetComponent<Terrain>().terrainData.size.y * heightMap[(int)(spawnPos.x), (int)(spawnPos.y)], spawnPos.x);
+		this.transform.Find("apple").localPosition = new Vector3(foodPos.y, (int)terrain.GetComponent<Terrain>().terrainData.size.y * heightMap[(int)(foodPos.x), (int)(foodPos.y)], foodPos.x);
 	}
 
     // Update is called once per frame

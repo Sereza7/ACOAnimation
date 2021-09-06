@@ -8,18 +8,21 @@ public class AntSupervisorDynamic : MonoBehaviour
 	public GameObject antPrefab;
 	private AntControllerDynamic[] antList;
 
-	public float tickSpeed = 1f;
+	//Parameters
+	static internal float tickSpeed = 0.1f;
+	static internal int antAmount = 50;
+
 	private int currentTick;
 	private float startingTime;
-	// Start is called before the first frame update
+
 	void Start()
 	{
-		antList = new AntControllerDynamic[200];
+		antList = new AntControllerDynamic[antAmount];
 		for (int i = 0; i < antList.GetLength(0); i++)
 		{
 			GameObject ant = Instantiate(antPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 			antList[i] = ant.GetComponent<AntControllerDynamic>();
-			antList[i].SetTickSpeed(this.tickSpeed);
+			antList[i].tickSpeed= tickSpeed;
 		}
 		this.currentTick = 0;
 	}

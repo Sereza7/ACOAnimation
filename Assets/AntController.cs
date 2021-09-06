@@ -50,7 +50,7 @@ public class AntController : MonoBehaviour
 		this.lastTickTime = Time.time;
 		Vector2 newCoords = this.path[simulationTick];
 		this.oldPosition = this.transform.position;
-		this.newPosition = new Vector3(newCoords.y, 0.015f + 33 * this.heightMap[(int)(newCoords.x), (int)(newCoords.y)], newCoords.x);
+		this.newPosition = new Vector3(newCoords.y, 0.015f + (int)terrain.GetComponent<Terrain>().terrainData.size.y * this.heightMap[(int)(newCoords.x), (int)(newCoords.y)], newCoords.x);
 		this.oldForward = this.transform.forward;
 		this.newForward = this.newPosition - this.oldPosition;
 		if (this.newForward == Vector3.zero)
